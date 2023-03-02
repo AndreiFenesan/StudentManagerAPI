@@ -11,11 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
 
 @SpringBootApplication
 public class DemoApplication {
