@@ -1,6 +1,7 @@
 package com.example.demo.utility;
 
 import com.example.demo.domain.AuthorisationTokens;
+import com.example.demo.domain.UserType;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
@@ -28,10 +29,10 @@ public class TokenGenerator {
         return Hashing.sha256().hashString(generateRandomString(), StandardCharsets.UTF_8).toString();
     }
 
-    public AuthorisationTokens getNewAuthToken(String userId){
+    public AuthorisationTokens getNewAuthToken(String userId, UserType userType) {
         String availableAuthenticationToken = this.getNewToken();
         String availableRefreshToken = this.getNewToken();
         LocalDateTime tokenAvailability = LocalDateTime.now().plusMinutes(5);
-        return new AuthorisationTokens(userId,availableAuthenticationToken,availableRefreshToken,tokenAvailability);
+        return new AuthorisationTokens(userId, availableAuthenticationToken, availableRefreshToken, tokenAvailability, userType);
     }
 }

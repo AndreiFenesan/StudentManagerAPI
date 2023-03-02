@@ -16,7 +16,6 @@ import java.util.Optional;
 public class GradeService {
     private final GradeRepo gradeRepo;
     private final StudentRepo studentRepo;
-
     private final SubjectRepo subjectRepo;
 
     public GradeService(GradeRepo gradeRepo, StudentRepo studentRepo, SubjectRepo subjectRepo) {

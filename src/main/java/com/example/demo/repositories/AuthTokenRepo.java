@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface AuthTokenRepo extends MongoRepository<AuthorisationTokens, String> {
     public Optional<AuthorisationTokens> findAuthTokenByUserId(String userId);
+
+    Optional<AuthorisationTokens> findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(String userId);
 }

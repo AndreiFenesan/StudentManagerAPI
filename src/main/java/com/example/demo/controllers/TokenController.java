@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.domain.AuthorisationTokens;
+import com.example.demo.domain.UserType;
 import com.example.demo.dtos.TokenDto;
 import com.example.demo.services.AuthTokenService;
 import lombok.AllArgsConstructor;
@@ -17,17 +18,31 @@ import java.util.Optional;
 public class TokenController {
     private final AuthTokenService tokenService;
 
-    @PostMapping("/login")
-    public TokenDto registerSession(@RequestHeader Map<String, String> header) {
-        Optional<AuthorisationTokens> optionalAuthToken = tokenService.registerNewSession(header.get("username"), header.get("password"));
+    @PostMapping("/login/student")
+    public TokenDto registerStudentSession(@RequestHeader Map<String, String> header) {
+        Optional<AuthorisationTokens> optionalAuthToken = tokenService.registerNewSession(header.get("username"), header.get("password"), UserType.STUDENT);
         if (optionalAuthToken.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         } else {
-            AuthorisationTokens authorisationTokens = optionalAuthToken.get();
-            String authorisationToken = authorisationTokens.getAuthToken();
-            String refreshToken = authorisationTokens.getRefreshToken();
-            return new TokenDto(authorisationToken, refreshToken);
+            return getTokenDto(optionalAuthToken);
         }
+    }
+
+    @PostMapping("/login/professor")
+    public TokenDto registerProfessorSession(@RequestHeader Map<String, String> header) {
+        Optional<AuthorisationTokens> optionalAuthToken = tokenService.registerNewSession(header.get("username"), header.get("password"), UserType.PROFESSOR);
+        if (optionalAuthToken.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        } else {
+            return getTokenDto(optionalAuthToken);
+        }
+    }
+
+    private static TokenDto getTokenDto(Optional<AuthorisationTokens> optionalAuthToken) {
+        AuthorisationTokens authorisationTokens = optionalAuthToken.get();
+        String authorisationToken = authorisationTokens.getAuthToken();
+        String refreshToken = authorisationTokens.getRefreshToken();
+        return new TokenDto(authorisationToken, refreshToken);
     }
 
     @PostMapping("/renewtoken")
@@ -36,10 +51,7 @@ public class TokenController {
         if (optionalAuthToken.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token expired");
         } else {
-            AuthorisationTokens authorisationTokens = optionalAuthToken.get();
-            String authorisationToken = authorisationTokens.getAuthToken();
-            String refreshToken = authorisationTokens.getRefreshToken();
-            return new TokenDto(authorisationToken, refreshToken);
+            return getTokenDto(optionalAuthToken);
         }
     }
 

@@ -15,13 +15,16 @@ public class AuthorisationTokens {
     private String authToken;
     private String refreshToken;
 
+    private UserType userType;
+
     private LocalDateTime tokenAvailability;
 
-    public AuthorisationTokens(String userId, String authToken, String refreshToken, LocalDateTime tokenAvailability) {
+    public AuthorisationTokens(String userId, String authToken, String refreshToken, LocalDateTime tokenAvailability, UserType userType) {
         this.userId = userId;
         this.authToken = authToken;
         this.refreshToken = refreshToken;
         this.tokenAvailability = tokenAvailability;
+        this.userType = userType;
     }
 
     public String getAuthToken() {
@@ -34,5 +37,9 @@ public class AuthorisationTokens {
 
     public LocalDateTime getTokenAvailability() {
         return tokenAvailability;
+    }
+
+    public UserType getUserType() {
+        return userType;
     }
 }
