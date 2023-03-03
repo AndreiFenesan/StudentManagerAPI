@@ -52,6 +52,7 @@ public class GradeService {
     }
 
     public List<GradeDto> getStudentGrades(String studentId) throws ServiceException {
+        System.out.println("HERE");
         System.out.println(studentId);
         if (studentRepo.findById(studentId).isEmpty()) {
             throw new ServiceException("Student does not exist");

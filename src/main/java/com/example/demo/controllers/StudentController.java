@@ -1,4 +1,5 @@
 package com.example.demo.controllers;
+
 import com.example.demo.exception.ServiceException;
 import com.example.demo.services.StudentService;
 import com.example.demo.domain.Student;
@@ -8,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -22,7 +22,7 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
-    @PostMapping(path = "/add")
+    @PostMapping
     public Student AddStudent(@RequestBody Student student) {
         try {
             return studentService.addStudent(student);

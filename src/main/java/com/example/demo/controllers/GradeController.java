@@ -22,7 +22,7 @@ public class GradeController {
         this.gradeService = gradeService;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/professor")
     public void addGrade(@RequestBody Grade grade) {
         try {
             this.gradeService.addGrade(grade.getSubjectCode(), grade.getStudentId(), grade.getGrade(), grade.getGraduationDate());
@@ -31,7 +31,7 @@ public class GradeController {
         }
     }
 
-    @GetMapping()
+    @GetMapping("/student")
     public List<GradeDto> getGradesForStudent(@RequestBody StudentIdDto studentIdDto) {
         if (studentIdDto.getStudentId() == null) {
             throw new ResponseStatusException(HttpStatus.valueOf(500), "The given id is null");
@@ -43,10 +43,10 @@ public class GradeController {
         }
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/professor")
     public void deleteGradeForStudent(@RequestBody StudentIdAndSubjectCodeDto studentIdAndSubjectCode) {
         try {
-            System.out.println( this.gradeService.deleteGradeForStudent(studentIdAndSubjectCode.getStudentId(), studentIdAndSubjectCode.getSubjectCode()));
+            this.gradeService.deleteGradeForStudent(studentIdAndSubjectCode.getStudentId(), studentIdAndSubjectCode.getSubjectCode());
         } catch (ServiceException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
         }

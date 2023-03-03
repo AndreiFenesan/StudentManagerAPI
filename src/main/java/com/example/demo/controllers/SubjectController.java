@@ -15,10 +15,10 @@ public class SubjectController {
         this.service = service;
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public void addSubject(@RequestBody Subject subject) {
         if (this.service.addSubject(subject.getSubjectCode(), subject.getNumberOfCredits()) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Subject already exists");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Subject already exists");
         }
     }
 }

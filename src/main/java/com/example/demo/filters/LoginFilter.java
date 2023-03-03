@@ -1,6 +1,7 @@
 package com.example.demo.filters;
 
 import com.example.demo.MultiReadHttpServletRequest;
+import com.example.demo.domain.AuthorisationTokens;
 import com.example.demo.services.AuthTokenService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,11 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class LoginFilter implements Filter {
     private AuthTokenService authTokenService;
-
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -30,10 +31,12 @@ public class LoginFilter implements Filter {
         String userId = ((HttpServletRequest) servletRequest).getHeader("userId");
         String authorisationToken = ((HttpServletRequest) servletRequest).getHeader("authorisationToken");
         String refreshToken = ((HttpServletRequest) servletRequest).getHeader("refreshToken");
-        if (!this.authTokenService.authenticateUser(userId, authorisationToken, refreshToken)) {
+        Optional<AuthorisationTokens> optionalAuthorisationTokens = this.authTokenService.authenticateUser(userId, authorisationToken, refreshToken);
+        if (optionalAuthorisationTokens.isEmpty()) {
             ((HttpServletResponse) servletResponse).sendError(401, "Invalid token");
             return;
         }
+        copiedRequest.setAttribute("userType", optionalAuthorisationTokens.get().getUserType());
         filterChain.doFilter(copiedRequest, servletResponse);
     }
 

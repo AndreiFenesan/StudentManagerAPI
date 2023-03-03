@@ -20,14 +20,17 @@ public class AuthTokenService {
     private final StudentRepo studentRepo;
     private final ProfessorRepo professorRepo;
 
-    public boolean authenticateUser(String userId, String authenticationToken, String refreshToken) {
+    public Optional<AuthorisationTokens> authenticateUser(String userId, String authenticationToken, String refreshToken) {
         Optional<AuthorisationTokens> tokenOptional = authTokenRepo.findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(userId);
         if (tokenOptional.isEmpty()) {
-            return false;
+            return Optional.empty();
         }
         AuthorisationTokens token = tokenOptional.get();
-        return authenticationToken.equals(token.getAuthToken()) && refreshToken.equals(token.getRefreshToken())
-                && LocalDateTime.now().isBefore(token.getTokenAvailability());
+        if (authenticationToken.equals(token.getAuthToken()) && refreshToken.equals(token.getRefreshToken())
+                && LocalDateTime.now().isBefore(token.getTokenAvailability())) {
+            return tokenOptional;
+        }
+        return Optional.empty();
     }
 
     public Optional<AuthorisationTokens> registerNewSession(String username, String password, UserType userType) {
@@ -76,12 +79,9 @@ public class AuthTokenService {
 
     private boolean isUserAlreadyLoggedIn(String userId) {
         Optional<AuthorisationTokens> optionalToken = authTokenRepo.findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(userId);
-        if (optionalToken.isPresent()
-                && optionalToken.get().getTokenAvailability().isAfter(LocalDateTime.now())) {
-            //user already logged in
-            return true;
-        }
-        return false;
+        //user already logged in
+        return optionalToken.isPresent()
+                && optionalToken.get().getTokenAvailability().isAfter(LocalDateTime.now());
     }
 
     private boolean checkPasswords(String password, String storedPassword) {
