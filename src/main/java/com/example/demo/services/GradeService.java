@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.domain.Grade;
 import com.example.demo.domain.Student;
 import com.example.demo.domain.Subject;
+import com.example.demo.dtos.GradeDto;
 import com.example.demo.exception.ServiceException;
 import com.example.demo.repositories.GradeRepo;
 import com.example.demo.repositories.StudentRepo;
@@ -10,7 +11,9 @@ import com.example.demo.repositories.SubjectRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GradeService {
@@ -30,7 +33,7 @@ public class GradeService {
             throw new ServiceException("Student does not exists");
         }
         Subject subject = this.subjectRepo.findSubjectBySubjectCode(subjectCode);
-        if(subject == null){
+        if (subject == null) {
             throw new ServiceException("Subject does not exists");
         }
 
@@ -41,5 +44,15 @@ public class GradeService {
         Grade studentGrade = new Grade(studentId, subjectCode, grade, graduationDate);
         this.gradeRepo.save(studentGrade);
         return studentGrade;
+    }
+
+    public List<GradeDto> getStudentGrades(String studentId) throws ServiceException {
+        System.out.println(studentId);
+        if (studentRepo.findById(studentId).isEmpty()) {
+            throw new ServiceException("Student does not exist");
+        }
+        List<Grade> studentGrades = this.gradeRepo.findGradesByStudentId(studentId);
+        return studentGrades.stream().map(grade -> new GradeDto(grade.getSubjectCode(), grade.getGrade()
+                , grade.getGraduationDate())).collect(Collectors.toList());
     }
 }
