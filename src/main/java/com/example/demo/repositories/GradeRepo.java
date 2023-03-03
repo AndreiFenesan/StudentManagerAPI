@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface GradeRepo extends MongoRepository<Grade,String> {
     Optional<Grade> findGradeBySubjectCodeAndStudentId(String subjectCode, String studentId);
     List<Grade> findGradesByStudentId(String studentId);
+    Optional<Grade> deleteGradeByStudentIdAndSubjectCode(String studentId, String subjectCode);
 }

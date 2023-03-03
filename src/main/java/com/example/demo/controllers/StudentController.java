@@ -20,7 +20,6 @@ public class StudentController {
     }
     @PostMapping(path = "/add")
     public Student AddStudent(@RequestBody Student student){
-        System.out.println("aici");
         return studentService.addStudent(student);
     }
 }

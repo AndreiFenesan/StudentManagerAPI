@@ -55,4 +55,12 @@ public class GradeService {
         return studentGrades.stream().map(grade -> new GradeDto(grade.getSubjectCode(), grade.getGrade()
                 , grade.getGraduationDate())).collect(Collectors.toList());
     }
+
+    public Grade deleteGradeForStudent(String studentId, String subjectCode) throws ServiceException {
+        Optional<Grade> optionalGrade = this.gradeRepo.deleteGradeByStudentIdAndSubjectCode(studentId, subjectCode);
+        if (optionalGrade.isEmpty()) {
+            throw new ServiceException("Student has no grade at this subject");
+        }
+        return optionalGrade.get();
+    }
 }
