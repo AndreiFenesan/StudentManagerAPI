@@ -32,14 +32,14 @@ public class DemoApplication {
         };
     }
 
-    @Bean
-    @Autowired
-    public FilterRegistrationBean<LoginFilter> loginFilter(AuthTokenService service) {
-        FilterRegistrationBean<LoginFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new LoginFilter(service));
-        registrationBean.addUrlPatterns("/api/students/add");
-        registrationBean.setOrder(1);
-        return registrationBean;
-    }
+//    @Bean
+//    @Autowired
+//    public FilterRegistrationBean<LoginFilter> loginFilter(AuthTokenService service) {
+//        FilterRegistrationBean<LoginFilter> registrationBean = new FilterRegistrationBean<>();
+//        registrationBean.setFilter(new LoginFilter(service));
+//        registrationBean.addUrlPatterns("/api/students/add");
+//        registrationBean.setOrder(1);
+//        return registrationBean;
+//    }
 
 }

@@ -1,7 +1,11 @@
 package com.example.demo.services;
 
 import com.example.demo.domain.Student;
+import com.example.demo.exception.ServiceException;
 import com.example.demo.repositories.StudentRepo;
+import com.example.demo.validators.StudentValidator;
+import com.example.demo.validators.ValidationError;
+import com.example.demo.validators.Validator;
 import com.google.common.hash.Hashing;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +18,13 @@ import java.util.List;
 @Service
 public class StudentService {
     private final StudentRepo studentRepo;
+    private final StudentValidator studentValidator;
 
-    public Student addStudent(Student student) {
+    public Student addStudent(Student student) throws ValidationError, ServiceException {
+        studentValidator.validate(student);
+        if (this.studentRepo.findStudentByUsername(student.getUsername()).isPresent()) {
+            throw new ServiceException("Student with this username already exists");
+        }
         String password = student.getPassword();
         String encryptedPassword = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
         student.setPassword(encryptedPassword);
