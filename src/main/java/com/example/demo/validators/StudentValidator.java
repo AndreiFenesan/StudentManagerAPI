@@ -1,7 +1,6 @@
 package com.example.demo.validators;
 
 import com.example.demo.domain.Student;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component

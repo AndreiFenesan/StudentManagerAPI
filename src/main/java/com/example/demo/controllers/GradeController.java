@@ -6,6 +6,7 @@ import com.example.demo.dtos.StudentIdAndSubjectCodeDto;
 import com.example.demo.dtos.StudentIdDto;
 import com.example.demo.exception.ServiceException;
 import com.example.demo.services.GradeService;
+import com.example.demo.validators.ValidationError;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,8 +26,8 @@ public class GradeController {
     public void addGrade(@RequestBody Grade grade) {
         try {
             this.gradeService.addGrade(grade.getSubjectCode(), grade.getStudentId(), grade.getGrade(), grade.getGraduationDate());
-        } catch (ServiceException serviceException) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, serviceException.getMessage());
+        } catch (ServiceException | ValidationError exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
         }
     }
 

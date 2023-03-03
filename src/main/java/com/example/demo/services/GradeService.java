@@ -8,6 +8,7 @@ import com.example.demo.exception.ServiceException;
 import com.example.demo.repositories.GradeRepo;
 import com.example.demo.repositories.StudentRepo;
 import com.example.demo.repositories.SubjectRepo;
+import com.example.demo.validators.GradeValidator;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,14 +21,19 @@ public class GradeService {
     private final GradeRepo gradeRepo;
     private final StudentRepo studentRepo;
     private final SubjectRepo subjectRepo;
+    private final GradeValidator gradeValidator;
 
-    public GradeService(GradeRepo gradeRepo, StudentRepo studentRepo, SubjectRepo subjectRepo) {
+    public GradeService(GradeRepo gradeRepo, StudentRepo studentRepo, SubjectRepo subjectRepo, GradeValidator gradeValidator) {
         this.gradeRepo = gradeRepo;
         this.studentRepo = studentRepo;
         this.subjectRepo = subjectRepo;
+        this.gradeValidator = gradeValidator;
     }
 
     public Grade addGrade(String subjectCode, String studentId, Integer grade, LocalDate graduationDate) throws ServiceException {
+        Grade studentGrade = new Grade(studentId, subjectCode, grade, graduationDate);
+        gradeValidator.validate(studentGrade);
+
         Optional<Student> optionalStudent = this.studentRepo.findById(studentId);
         if (optionalStudent.isEmpty()) {
             throw new ServiceException("Student does not exists");
@@ -41,7 +47,6 @@ public class GradeService {
         if (optionalGrade.isPresent()) {
             throw new ServiceException("The student already has a grade for this subject");
         }
-        Grade studentGrade = new Grade(studentId, subjectCode, grade, graduationDate);
         this.gradeRepo.save(studentGrade);
         return studentGrade;
     }
