@@ -17,4 +17,15 @@ public class Subject {
         this.numberOfCredits = numberOfCredits;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public Integer getNumberOfCredits() {
+        return numberOfCredits;
+    }
 }
