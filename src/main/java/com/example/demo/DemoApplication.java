@@ -34,7 +34,7 @@ public class DemoApplication {
     public FilterRegistrationBean<ProfessorFilter> professorFilter() {
         FilterRegistrationBean<ProfessorFilter> professorFilterBean = new FilterRegistrationBean<>();
         professorFilterBean.setFilter(new ProfessorFilter());
-        professorFilterBean.addUrlPatterns("/api/grade/professor", "/api/students/*", "/api/subject");
+        professorFilterBean.addUrlPatterns("/api/grade/professorGrades", "/api/students/*", "/api/subject");
         professorFilterBean.setOrder(2);
         return professorFilterBean;
     }

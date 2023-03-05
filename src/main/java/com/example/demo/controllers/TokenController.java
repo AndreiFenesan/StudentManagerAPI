@@ -38,7 +38,7 @@ public class TokenController {
         }
     }
 
-    private static TokenDto getTokenDto(Optional<AuthorisationTokens> optionalAuthToken) {
+    private TokenDto getTokenDto(Optional<AuthorisationTokens> optionalAuthToken) {
         AuthorisationTokens authorisationTokens = optionalAuthToken.get();
         String authorisationToken = authorisationTokens.getAuthToken();
         String refreshToken = authorisationTokens.getRefreshToken();

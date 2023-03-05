@@ -22,12 +22,7 @@ public class LoginFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        //ObjectMapper mapper = new ObjectMapper();
         MultiReadHttpServletRequest copiedRequest = new MultiReadHttpServletRequest((HttpServletRequest) servletRequest);
-//        Map jsonMap = mapper.readValue(copiedRequest.getInputStream(),Map.class);
-//        logger.info(jsonMap.toString());
-//        logger.info("VALID!!");
-//        logger.info(((HttpServletRequest) servletRequest).getHeader("username"));
         String userId = ((HttpServletRequest) servletRequest).getHeader("userId");
         String authorisationToken = ((HttpServletRequest) servletRequest).getHeader("authorisationToken");
         String refreshToken = ((HttpServletRequest) servletRequest).getHeader("refreshToken");
