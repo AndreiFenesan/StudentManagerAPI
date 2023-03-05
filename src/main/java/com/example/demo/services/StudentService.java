@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -30,6 +31,10 @@ public class StudentService {
         student.setPassword(encryptedPassword);
         student.setCreated(LocalDateTime.now());
         return studentRepo.save(student);
+    }
+
+    public Optional<Student> findStudentByUsername(String username){
+        return studentRepo.findStudentByUsername(username);
     }
 
     public List<Student> getAllStudents() {
