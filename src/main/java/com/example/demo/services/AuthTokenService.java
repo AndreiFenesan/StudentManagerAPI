@@ -78,14 +78,15 @@ public class AuthTokenService {
     }
 
     private boolean isUserAlreadyLoggedIn(String userId) {
-        Optional<AuthorisationTokens> optionalToken = authTokenRepo.findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(userId);
+        Optional<AuthorisationTokens> optionalToken =
+                authTokenRepo.findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(userId);
         //user already logged in
         return optionalToken.isPresent()
                 && optionalToken.get().getTokenAvailability().isAfter(LocalDateTime.now());
     }
 
-    private boolean checkPasswords(String password, String storedPassword) {
-        String encryptedPassword = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
+    private boolean checkPasswords(String nonHashedPassword, String storedPassword) {
+        String encryptedPassword = Hashing.sha256().hashString(nonHashedPassword, StandardCharsets.UTF_8).toString();
         return storedPassword.equals(encryptedPassword);
     }
 
