@@ -44,7 +44,7 @@ public class StudentService {
 
     /**
      * @param username Unique string, representing the username of the student.
-     * @return Optional<Student> representing te student which has the int parameter username
+     * @return the student which has the int parameter username
      */
     public Optional<Student> findStudentByUsername(String username) {
         return studentRepo.findStudentByUsername(username);
