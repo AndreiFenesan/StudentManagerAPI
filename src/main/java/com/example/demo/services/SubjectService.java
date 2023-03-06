@@ -21,8 +21,8 @@ public class SubjectService {
     /**
      * add a new subject, if there is no other subject with the same subjectCode
      *
-     * @param subjectCode     - String representing the unique code of the subject
-     * @param numberOfCredits - Integer representing the subject's number of credits
+     * @param subjectCode      String representing the unique code of the subject
+     * @param numberOfCredits  Integer representing the subject's number of credits
      * @return the added subject, if there is no other subject with the same subjectCode.
      * @throws ValidationError if subject is not valid
      *                         null, if the add was not possible
@@ -39,6 +39,11 @@ public class SubjectService {
         return subject;
     }
 
+    /**
+     *
+     * @param subjectCode -String representing the subjectCode of the subject we want to find.
+     * @return the found subject
+     */
     public Optional<Subject> findSubjectBySubjectCode(String subjectCode) {
         return this.subjectRepo.findSubjectBySubjectCode(subjectCode);
     }
