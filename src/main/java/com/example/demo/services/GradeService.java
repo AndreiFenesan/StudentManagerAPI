@@ -9,6 +9,7 @@ import com.example.demo.repositories.GradeRepo;
 import com.example.demo.repositories.StudentRepo;
 import com.example.demo.repositories.SubjectRepo;
 import com.example.demo.validators.GradeValidator;
+import com.example.demo.validators.ValidationError;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,7 +31,16 @@ public class GradeService {
         this.gradeValidator = gradeValidator;
     }
 
-    public Grade addGrade(String subjectCode, String studentId, Integer grade, LocalDate graduationDate) throws ServiceException {
+    /**
+     * @param subjectCode    - String representing the subjectCode of the course to witch we add the grade.
+     * @param studentId      - String representing the id of the student who got the grade.
+     * @param grade          - Integer representing the student grade at the subject with id subjectCode.
+     * @param graduationDate - LocalDate representing the date when the student passed the exam.
+     * @return the added grade, if the addition is possible.
+     * @throws ServiceException if there is no student with the studentId or there is no subject with subjectCode
+     * @throws ValidationError  if grade is not valid
+     */
+    public Grade addGrade(String subjectCode, String studentId, Integer grade, LocalDate graduationDate) throws ServiceException, ValidationError {
         Grade studentGrade = new Grade(studentId, subjectCode, grade, graduationDate);
         gradeValidator.validate(studentGrade);
 
@@ -51,9 +61,12 @@ public class GradeService {
         return studentGrade;
     }
 
+    /**
+     * @param studentId - String representing the id of the student for which we want to get all grades.
+     * @return a list with all grades of the student with studentId.
+     * @throws ServiceException if the student with studentID does not exist.
+     */
     public List<GradeDto> getStudentGrades(String studentId) throws ServiceException {
-        System.out.println("HERE");
-        System.out.println(studentId);
         if (studentRepo.findById(studentId).isEmpty()) {
             throw new ServiceException("Student does not exist");
         }
@@ -62,6 +75,12 @@ public class GradeService {
                 , grade.getGraduationDate())).collect(Collectors.toList());
     }
 
+    /**
+     * @param studentId   - String representing the id of the student whose grade we are deleting.
+     * @param subjectCode - String representing the id of the subject whose grade we are deleting.
+     * @return the deleted grade.
+     * @throws ServiceException if there is no grade at this subject and for this student.
+     */
     public Grade deleteGradeForStudent(String studentId, String subjectCode) throws ServiceException {
         Optional<Grade> optionalGrade = this.gradeRepo.deleteGradeByStudentIdAndSubjectCode(studentId, subjectCode);
         if (optionalGrade.isEmpty()) {
