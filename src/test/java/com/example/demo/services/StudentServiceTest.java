@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.domain.Student;
+import com.example.demo.exception.ServiceException;
 import com.example.demo.repositories.StudentRepo;
 import com.example.demo.services.StudentService;
 import com.example.demo.validators.ValidationError;
@@ -18,6 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 
+import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDateTime;
@@ -82,6 +84,17 @@ class StudentServiceTest {
         assertEquals(foundStudent.getFirstName(), "Vasile");
         assertEquals(foundStudent.getLastName(), "Micu");
         assertEquals(foundStudent.getUsername(), "MicuVasile");
+    }
+
+    @Test
+    @DisplayName("ServiceError add student with the same username")
+    void addStudentWithSameUsername() {
+        studentService.addStudent("Vasile", "Micu", "MicuVasile", "assddsaBGG1234");
+        assertEquals(studentService.getAllStudents().size(), 1);
+        assertThrows(
+                ServiceException.class,
+                () -> studentService.addStudent("Vasilee", "Micuu", "MicuVasile", "23assddsaBGG1234")
+        );
     }
 
     @Test
