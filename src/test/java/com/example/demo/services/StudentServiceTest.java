@@ -52,8 +52,9 @@ class StudentServiceTest {
     static void initAll() {
         container.start();
     }
+
     @AfterEach
-    void destroy(){
+    void destroy() {
         studentRepo.deleteAll();
     }
 
@@ -73,38 +74,27 @@ class StudentServiceTest {
     @Test
     @DisplayName("The student is added successfully")
     void addStudentSuccessfully() {
-        Student student = new Student(
-                "Vasile",
-                "Micu",
-                "MicuVasile",
-                "assddsaBGG1234",
-                LocalDateTime.now()
-        );
-        studentService.addStudent(student);
-        assertEquals(studentService.getAllStudents().size(),1);
+        studentService.addStudent("Vasile", "Micu", "MicuVasile", "assddsaBGG1234");
+        assertEquals(studentService.getAllStudents().size(), 1);
         Optional<Student> optionalStudent = studentService.findStudentByUsername("MicuVasile");
         assertTrue(optionalStudent.isPresent());
         Student foundStudent = optionalStudent.get();
-        assertEquals(foundStudent.getFirstName(),"Vasile");
-        assertEquals(foundStudent.getLastName(),"Micu");
-        assertEquals(foundStudent.getUsername(),"MicuVasile");
+        assertEquals(foundStudent.getFirstName(), "Vasile");
+        assertEquals(foundStudent.getLastName(), "Micu");
+        assertEquals(foundStudent.getUsername(), "MicuVasile");
     }
 
     @Test
     @DisplayName("The student firstname is not valid")
     void addStudentNotValidFirstName() {
-        Student student = new Student(
-                null,
-                "Micu",
-                "MicuVasile",
-                "assddsaBGG1234",
-                LocalDateTime.now()
-        );
         try {
-            studentService.addStudent(student);
+            studentService.addStudent(
+                    null,
+                    "Micu",
+                    "MicuVasile",
+                    "assddsaBGG1234");
             fail();
-        }
-        catch (ValidationError validationError){
+        } catch (ValidationError validationError) {
             assertTrue(true);
         }
     }
@@ -112,18 +102,14 @@ class StudentServiceTest {
     @Test
     @DisplayName("The student password is not valid")
     void addStudentNotValidPassword() {
-        Student student = new Student(
-                "Laurentiu",
-                "Micu",
-                "MicuVasile",
-                "asdasdad81232",
-                LocalDateTime.now()
-        );
         try {
-            studentService.addStudent(student);
+            studentService.addStudent(
+                    "Laurentiu",
+                    "Micu",
+                    "MicuVasile",
+                    "asdasdad81232");
             fail();
-        }
-        catch (ValidationError validationError){
+        } catch (ValidationError validationError) {
             assertTrue(true);
         }
     }

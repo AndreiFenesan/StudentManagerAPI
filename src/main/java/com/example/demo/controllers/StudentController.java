@@ -25,7 +25,12 @@ public class StudentController {
     @PostMapping
     public Student AddStudent(@RequestBody Student student) {
         try {
-            return studentService.addStudent(student);
+            return studentService.addStudent(
+                    student.getFirstName(),
+                    student.getLastName(),
+                    student.getUsername(),
+                    student.getPassword()
+            );
         } catch (ServiceException | ValidationError exception) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
         }

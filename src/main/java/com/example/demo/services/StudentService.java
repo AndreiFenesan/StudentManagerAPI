@@ -19,14 +19,14 @@ import java.util.Optional;
 @Service
 public class StudentService {
     private final StudentRepo studentRepo;
-    private final StudentValidator studentValidator;
+    private final Validator<Student> studentValidator;
 
-    public Student addStudent(Student student) throws ValidationError, ServiceException {
+    public Student addStudent(String firstName, String lastName, String username, String password) throws ValidationError, ServiceException {
+        Student student = new Student(firstName,lastName,username,password,LocalDateTime.now());
         studentValidator.validate(student);
         if (this.studentRepo.findStudentByUsername(student.getUsername()).isPresent()) {
             throw new ServiceException("Student with this username already exists");
         }
-        String password = student.getPassword();
         String encryptedPassword = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
         student.setPassword(encryptedPassword);
         student.setCreated(LocalDateTime.now());
