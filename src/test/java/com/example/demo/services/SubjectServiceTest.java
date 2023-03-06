@@ -14,6 +14,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
@@ -54,8 +56,9 @@ class SubjectServiceTest {
     @DisplayName("Find subject by subjectCode")
     void findSubjectBySubjectCode() {
         assertNotNull(subjectService.addSubject("MLR1234", 6));
-        Subject subject = this.subjectService.findSubjectBySubjectCode("MLR1234");
-        assertNotNull(subject);
+        Optional<Subject> optionalSubject = this.subjectService.findSubjectBySubjectCode("MLR1234");
+        assertTrue(optionalSubject.isPresent());
+        Subject subject = optionalSubject.get();
         assertEquals(subject.getSubjectCode(), "MLR1234");
         assertEquals(subject.getNumberOfCredits(), 6);
     }

@@ -6,6 +6,8 @@ import com.example.demo.validators.SubjectValidator;
 import com.example.demo.validators.ValidationError;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SubjectService {
     private final SubjectRepo subjectRepo;
@@ -23,21 +25,21 @@ public class SubjectService {
      * @param numberOfCredits - Integer representing the subject's number of credits
      * @return the added subject, if there is no other subject with the same subjectCode.
      * @throws ValidationError if subject is not valid
-     * null, if the add was not possible
+     *                         null, if the add was not possible
      **/
     public Subject addSubject(String subjectCode, Integer numberOfCredits) throws ValidationError {
         Subject subject = new Subject(subjectCode, numberOfCredits);
         this.subjectValidator.validate(subject);
 
-        Subject dataSubject = subjectRepo.findSubjectBySubjectCode(subjectCode);
-        if (dataSubject != null) {
+        Optional<Subject> optionalSubject = subjectRepo.findSubjectBySubjectCode(subjectCode);
+        if (optionalSubject.isPresent()) {
             return null;
         }
         this.subjectRepo.save(subject);
         return subject;
     }
 
-    public Subject findSubjectBySubjectCode(String subjectCode) {
+    public Optional<Subject> findSubjectBySubjectCode(String subjectCode) {
         return this.subjectRepo.findSubjectBySubjectCode(subjectCode);
     }
 }

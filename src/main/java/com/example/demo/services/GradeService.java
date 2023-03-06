@@ -38,8 +38,8 @@ public class GradeService {
         if (optionalStudent.isEmpty()) {
             throw new ServiceException("Student does not exists");
         }
-        Subject subject = this.subjectRepo.findSubjectBySubjectCode(subjectCode);
-        if (subject == null) {
+        Optional<Subject> optionalSubject = this.subjectRepo.findSubjectBySubjectCode(subjectCode);
+        if (optionalSubject.isEmpty()) {
             throw new ServiceException("Subject does not exists");
         }
 

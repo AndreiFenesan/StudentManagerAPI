@@ -1,8 +1,10 @@
 package com.example.demo.services;
 
 import com.example.demo.domain.Student;
+import com.example.demo.repositories.StudentRepo;
 import com.example.demo.services.StudentService;
 import com.example.demo.validators.ValidationError;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,8 @@ class StudentServiceTest {
 
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private StudentRepo studentRepo;
     @Container
     final static GenericContainer container = new GenericContainer(DockerImageName.parse("mongo:4.0.10"))
             .withExposedPorts(27017)
@@ -47,6 +51,10 @@ class StudentServiceTest {
     @BeforeAll
     static void initAll() {
         container.start();
+    }
+    @AfterEach
+    void destroy(){
+        studentRepo.deleteAll();
     }
 
     @Test
