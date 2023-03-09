@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.domain.*;
+import com.example.demo.exception.ServiceException;
 import com.example.demo.repositories.AuthTokenRepo;
 import com.example.demo.repositories.ProfessorRepo;
 import com.example.demo.repositories.StudentRepo;
@@ -20,7 +21,7 @@ public class AuthTokenService {
     private final StudentRepo studentRepo;
     private final ProfessorRepo professorRepo;
 
-    public Optional<AuthorisationTokens> authenticateUser(String userId, String authenticationToken, String refreshToken) {
+    public Optional<AuthorisationTokens> authenticateUserToken(String userId, String authenticationToken, String refreshToken) {
         Optional<AuthorisationTokens> tokenOptional = authTokenRepo.findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(userId);
         if (tokenOptional.isEmpty()) {
             return Optional.empty();
@@ -33,7 +34,7 @@ public class AuthTokenService {
         return Optional.empty();
     }
 
-    public Optional<AuthorisationTokens> registerNewSession(String username, String password, UserType userType) {
+    public Optional<AuthorisationTokens> registerNewSession(String username, String password, UserType userType) throws ServiceException {
         if (username == null || password == null) {
             return Optional.empty();
         }
@@ -54,27 +55,25 @@ public class AuthTokenService {
         if (user == null) {
             return Optional.empty();
         }
-        Optional<AuthorisationTokens> optionalAuthorisationTokens = getTokenForUser(user, password, userType);
-        if (optionalAuthorisationTokens.isEmpty()) {
+        if (!authenticateUserToken(user, password)) {
             return Optional.empty();
         }
-        AuthorisationTokens authorisationTokens = optionalAuthorisationTokens.get();
+        AuthorisationTokens authorisationTokens = getTokenForUser(user, userType);
         this.authTokenRepo.save(authorisationTokens);
         return Optional.of(authorisationTokens);
 
     }
 
-    private Optional<AuthorisationTokens> getTokenForUser(User user, String password, UserType userType) {
-        if (!checkPasswords(password, user.getPassword())) {
-            return Optional.empty();
-        }
-        if (isUserAlreadyLoggedIn(user.getId())) {
-            return Optional.empty();
-        }
-
+    private AuthorisationTokens getTokenForUser(User user, UserType userType) {
         TokenGenerator generator = new TokenGenerator();
-        AuthorisationTokens authorisationTokens = generator.getNewAuthToken(user.getId(), userType);
-        return Optional.of(authorisationTokens);
+        return generator.getNewAuthToken(user.getId(), userType);
+    }
+
+    private boolean authenticateUserToken(User user, String password) throws ServiceException {
+        if (!checkPasswords(password, user.getPassword())) {
+            return false;
+        }
+        return !isUserAlreadyLoggedIn(user.getId());
     }
 
     private boolean isUserAlreadyLoggedIn(String userId) {

@@ -26,7 +26,7 @@ public class LoginFilter implements Filter {
         String userId = ((HttpServletRequest) servletRequest).getHeader("userId");
         String authorisationToken = ((HttpServletRequest) servletRequest).getHeader("authorisationToken");
         String refreshToken = ((HttpServletRequest) servletRequest).getHeader("refreshToken");
-        Optional<AuthorisationTokens> optionalAuthorisationTokens = this.authTokenService.authenticateUser(userId, authorisationToken, refreshToken);
+        Optional<AuthorisationTokens> optionalAuthorisationTokens = this.authTokenService.authenticateUserToken(userId, authorisationToken, refreshToken);
         if (optionalAuthorisationTokens.isEmpty()) {
             ((HttpServletResponse) servletResponse).sendError(401, "Invalid token");
             return;
