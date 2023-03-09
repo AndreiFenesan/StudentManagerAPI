@@ -1,7 +1,6 @@
 package com.example.demo.services;
 
 import com.example.demo.domain.*;
-import com.example.demo.exception.ServiceException;
 import com.example.demo.repositories.AuthTokenRepo;
 import com.example.demo.repositories.ProfessorRepo;
 import com.example.demo.repositories.StudentRepo;
@@ -48,7 +47,7 @@ public class AuthTokenService {
      * @param username the use username.
      * @param password the user password
      * @param userType the user type
-     * @return Optional of AuthorisationTokens, if the username and password are valid.
+     * @return Optional of AuthorisationTokens, if the username and password are valid, otherwise Optional.empty().
      */
 
     public Optional<AuthorisationTokens> registerNewSession(String username, String password, UserType userType) {
@@ -72,9 +71,10 @@ public class AuthTokenService {
         if (user == null) {
             return Optional.empty();
         }
-        if (!authenticateUserToken(user, password)) {
+        if (!authenticateUser(user, password)) {
             return Optional.empty();
         }
+        manageIfUserIsAlreadyLoggedIn(user.getId());
         AuthorisationTokens authorisationTokens = getTokenForUser(user, userType);
         this.authTokenRepo.save(authorisationTokens);
         return Optional.of(authorisationTokens);
@@ -100,30 +100,25 @@ public class AuthTokenService {
      * @param password -  the password we check
      * @return true, if the data is valid, false otherwise.
      */
-    private boolean authenticateUserToken(User user, String password) {
-        if (!checkPasswords(password, user.getPassword())) {
-            return false;
-        }
-        return !isUserAlreadyLoggedIn(user.getId());
+    private boolean authenticateUser(User user, String password) {
+        return checkPasswords(password, user.getPassword());
     }
 
     /**
-     * method that checks if the user is logged in.
+     * method that removes the userToken is the user is already logged in
+     *
      * @param userId id of user we check if is logged in.
-     * @return true, if user with userId is logged in, false otherwise.
      */
-    private boolean isUserAlreadyLoggedIn(String userId) {
+    private void manageIfUserIsAlreadyLoggedIn(String userId) {
         Optional<AuthorisationTokens> optionalToken =
                 authTokenRepo.findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(userId);
         //user already logged in
-        return optionalToken.isPresent()
-                && optionalToken.get().getTokenAvailability().isAfter(LocalDateTime.now());
+        optionalToken.ifPresent(authorisationTokens -> authTokenRepo.deleteById(authorisationTokens.getId()));
     }
 
     /**
-     *
      * @param nonHashedPassword password that did not have the sha256 applied.
-     * @param storedPassword data stored in the database (already hashed with sha256)
+     * @param storedPassword    data stored in the database (already hashed with sha256)
      * @return true, if after hashing nonHashedPassword, this match the stored password.
      */
     private boolean checkPasswords(String nonHashedPassword, String storedPassword) {
@@ -132,11 +127,10 @@ public class AuthTokenService {
     }
 
     /**
-     *
-     * @param userId userId that of the user we renew the token for.
+     * @param userId       userId that of the user we renew the token for.
      * @param refreshToken refresh token of the user.
      * @return Optional.empty() if the refresh toke of the user is not valid.
-     *          optional of the new generated token, if the refresh toke of the user is valid.
+     * optional of the new generated token, if the refresh toke of the user is valid.
      */
 
     public Optional<AuthorisationTokens> renewAuthenticationToken(String userId, String refreshToken) {
