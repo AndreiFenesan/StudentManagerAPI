@@ -21,6 +21,14 @@ public class AuthTokenService {
     private final StudentRepo studentRepo;
     private final ProfessorRepo professorRepo;
 
+    /**
+     * @param userId              string, representing the user who has the authenticationToken.
+     * @param authenticationToken string, token of authentication token of user.
+     * @param refreshToken        string, refresh token of user
+     * @return Optional.empty, if the user does not have valid authentication tokens,
+     * otherwise the found authentication tokens.
+     */
+
     public Optional<AuthorisationTokens> authenticateUserToken(String userId, String authenticationToken, String refreshToken) {
         Optional<AuthorisationTokens> tokenOptional = authTokenRepo.findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(userId);
         if (tokenOptional.isEmpty()) {
@@ -34,7 +42,16 @@ public class AuthTokenService {
         return Optional.empty();
     }
 
-    public Optional<AuthorisationTokens> registerNewSession(String username, String password, UserType userType) throws ServiceException {
+    /**
+     * method that register a new session for the user who was the given username and password, if those are valid.
+     *
+     * @param username the use username.
+     * @param password the user password
+     * @param userType the user type
+     * @return Optional of AuthorisationTokens, if the username and password are valid.
+     */
+
+    public Optional<AuthorisationTokens> registerNewSession(String username, String password, UserType userType) {
         if (username == null || password == null) {
             return Optional.empty();
         }
@@ -64,18 +81,37 @@ public class AuthTokenService {
 
     }
 
+    /**
+     * method that generates a token for the user
+     *
+     * @param user     the user we generate the tokens for.
+     * @param userType the user type
+     * @return the generated token
+     */
     private AuthorisationTokens getTokenForUser(User user, UserType userType) {
         TokenGenerator generator = new TokenGenerator();
         return generator.getNewAuthToken(user.getId(), userType);
     }
 
-    private boolean authenticateUserToken(User user, String password) throws ServiceException {
+    /**
+     * method that checks is the entered password and username are valid, and if the user is not logged in.
+     *
+     * @param user     - user that we check
+     * @param password -  the password we check
+     * @return true, if the data is valid, false otherwise.
+     */
+    private boolean authenticateUserToken(User user, String password) {
         if (!checkPasswords(password, user.getPassword())) {
             return false;
         }
         return !isUserAlreadyLoggedIn(user.getId());
     }
 
+    /**
+     * method that checks if the user is logged in.
+     * @param userId id of user we check if is logged in.
+     * @return true, if user with userId is logged in, false otherwise.
+     */
     private boolean isUserAlreadyLoggedIn(String userId) {
         Optional<AuthorisationTokens> optionalToken =
                 authTokenRepo.findFirst1AuthorisationTokensByUserIdOrderByTokenAvailabilityDesc(userId);
@@ -84,10 +120,24 @@ public class AuthTokenService {
                 && optionalToken.get().getTokenAvailability().isAfter(LocalDateTime.now());
     }
 
+    /**
+     *
+     * @param nonHashedPassword password that did not have the sha256 applied.
+     * @param storedPassword data stored in the database (already hashed with sha256)
+     * @return true, if after hashing nonHashedPassword, this match the stored password.
+     */
     private boolean checkPasswords(String nonHashedPassword, String storedPassword) {
         String encryptedPassword = Hashing.sha256().hashString(nonHashedPassword, StandardCharsets.UTF_8).toString();
         return storedPassword.equals(encryptedPassword);
     }
+
+    /**
+     *
+     * @param userId userId that of the user we renew the token for.
+     * @param refreshToken refresh token of the user.
+     * @return Optional.empty() if the refresh toke of the user is not valid.
+     *          optional of the new generated token, if the refresh toke of the user is valid.
+     */
 
     public Optional<AuthorisationTokens> renewAuthenticationToken(String userId, String refreshToken) {
         Optional<AuthorisationTokens> tokenOptional = authTokenRepo.findAuthTokenByUserId(userId);
