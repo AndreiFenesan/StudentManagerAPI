@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.domain.Grade;
 import com.example.demo.domain.Student;
+import com.example.demo.domain.Subject;
 import com.example.demo.dtos.GradeDto;
 import com.example.demo.exception.ServiceException;
 import com.example.demo.repositories.GradeRepo;
@@ -83,8 +84,8 @@ class GradeServiceTest {
                 null);
         student = studentService.addStudent(student);
 
-        subjectService.addSubject("MLR1234", 6);
-        subjectService.addSubject("MLR1334", 6);
+        subjectService.addSubject(new Subject("MLR1234", 6));
+        subjectService.addSubject(new Subject("MLR1334", 6));
 
         Grade grade1 = new Grade(student.getId(), "MLR1234", 8, LocalDate.now());
         Grade grade2 = new Grade(student.getId(), "MLR1334", 10, LocalDate.now());
@@ -109,7 +110,7 @@ class GradeServiceTest {
                 "5020308945271",
                 null);
         studentService.addStudent(student);
-        subjectService.addSubject("MLR1234", 6);
+        subjectService.addSubject(new Subject("MLR1234", 6));
         Grade grade = new Grade("asdasd", "MLR1234", 0, LocalDate.now());
         assertThrows(
                 ValidationError.class,
@@ -120,7 +121,7 @@ class GradeServiceTest {
     @Test
     @DisplayName("Student does not exist service error")
     void addGradeStudentDoesNotExist() {
-        subjectService.addSubject("MLR1234", 6);
+        subjectService.addSubject(new Subject("MLR1234", 6));
         Grade grade = new Grade("basdads", "MLR1234", 6, LocalDate.now());
 
         assertThrows(
@@ -163,7 +164,7 @@ class GradeServiceTest {
                 null);
         student = studentService.addStudent(student);
 
-        subjectService.addSubject("MLR1234", 6);
+        subjectService.addSubject(new Subject("MLR1234", 6));
 
         Grade grade1 = new Grade(student.getId(), "MLR1234", 8, LocalDate.now());
         Grade grade2 = new Grade(student.getId(), "MLR1234", 6, LocalDate.now());
@@ -193,8 +194,8 @@ class GradeServiceTest {
                 null);
         student = studentService.addStudent(student);
 
-        subjectService.addSubject("MLR1111", 3);
-        subjectService.addSubject("MLR2222", 4);
+        subjectService.addSubject(new Subject("MLR1111", 3));
+        subjectService.addSubject(new Subject("MLR2222", 4));
 
         Grade grade1 = new Grade(student.getId(), "MLR1111", 5, LocalDate.now());
         Grade grade2 = new Grade(student.getId(), "MLR2222", 6, LocalDate.now());
@@ -233,8 +234,8 @@ class GradeServiceTest {
                 null);
         student = studentService.addStudent(student);
 
-        subjectService.addSubject("MLR1234", 6);
-        subjectService.addSubject("MLR1334", 6);
+        subjectService.addSubject(new Subject("MLR1234", 6));
+        subjectService.addSubject(new Subject("MLR1334", 6));
 
         Grade grade1 = new Grade(student.getId(), "MLR1234", 8, LocalDate.now());
         Grade grade2 = new Grade(student.getId(), "MLR1334", 10, LocalDate.now());
@@ -266,7 +267,7 @@ class GradeServiceTest {
                 null);
         studentService.addStudent(student);
 
-        subjectService.addSubject("MLR1234", 6);
+        subjectService.addSubject(new Subject("MLR1234", 6));
         assertThrows(
                 ServiceException.class,
                 () -> gradeService.deleteGradeForStudent(student.getId(), "MLR1234")

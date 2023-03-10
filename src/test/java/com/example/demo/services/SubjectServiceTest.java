@@ -55,19 +55,22 @@ class SubjectServiceTest {
     @Test
     @DisplayName("Find subject by subjectCode")
     void findSubjectBySubjectCode() {
-        assertNotNull(subjectService.addSubject("MLR1234", 6));
+        Subject subject = new Subject("MLR1234", 6);
+        assertNotNull(subjectService.addSubject(subject));
+
         Optional<Subject> optionalSubject = this.subjectService.findSubjectBySubjectCode("MLR1234");
         assertTrue(optionalSubject.isPresent());
-        Subject subject = optionalSubject.get();
-        assertEquals(subject.getSubjectCode(), "MLR1234");
-        assertEquals(subject.getNumberOfCredits(), 6);
+        Subject subjectFromDb = optionalSubject.get();
+        assertEquals(subjectFromDb.getSubjectCode(), "MLR1234");
+        assertEquals(subjectFromDb.getNumberOfCredits(), 6);
     }
 
     @Test
     @DisplayName("Subject added successfully: tried adding subjects with the same subjectCode")
     void addSubjectTest() {
-        assertNotNull(subjectService.addSubject("MLR12345", 6));
-        assertNull(subjectService.addSubject("MLR12345", 6));
+        Subject subject = new Subject("MLR12345", 6);
+        assertNotNull(subjectService.addSubject(subject));
+        assertNull(subjectService.addSubject(subject));
         assertEquals(subjectRepo.findAll().size(), 1);
     }
 
@@ -75,7 +78,7 @@ class SubjectServiceTest {
     @DisplayName("Subject is not valid: null properties")
     void addSubjectNotValid() {
         try {
-            subjectService.addSubject(null, null);
+            subjectService.addSubject(new Subject(null, null));
             fail();
         } catch (ValidationError validationError) {
             assertTrue(true);
@@ -87,7 +90,7 @@ class SubjectServiceTest {
     @DisplayName("Subject not valid: invalid subjectCode")
     void invalidSubjectCode() {
         try {
-            subjectService.addSubject("Ml", 7);
+            subjectService.addSubject(new Subject("ML", 7));
             fail();
         } catch (ValidationError validationError) {
             assertTrue(true);
@@ -98,7 +101,7 @@ class SubjectServiceTest {
     @DisplayName("Subject not valid: invalid numberOfCredits")
     void invalidNumberOfCredits() {
         try {
-            subjectService.addSubject("MlR", 0);
+            subjectService.addSubject(new Subject("MLR", 0));
             fail();
         } catch (ValidationError validationError) {
             assertTrue(true);

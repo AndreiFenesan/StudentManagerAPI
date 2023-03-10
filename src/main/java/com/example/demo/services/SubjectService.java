@@ -21,22 +21,19 @@ public class SubjectService {
     /**
      * add a new subject, if there is no other subject with the same subjectCode
      *
-     * @param subjectCode      String representing the unique code of the subject
-     * @param numberOfCredits  Integer representing the subject's number of credits
+     * @param subject the subject we want to add
      * @return the added subject, if there is no other subject with the same subjectCode.
      * @throws ValidationError if subject is not valid
      *                         null, if the add was not possible
      **/
-    public Subject addSubject(String subjectCode, Integer numberOfCredits) throws ValidationError {
-        Subject subject = new Subject(subjectCode, numberOfCredits);
+    public Subject addSubject(Subject subject) throws ValidationError {
         this.subjectValidator.validate(subject);
 
-        Optional<Subject> optionalSubject = subjectRepo.findSubjectBySubjectCode(subjectCode);
+        Optional<Subject> optionalSubject = subjectRepo.findSubjectBySubjectCode(subject.getSubjectCode());
         if (optionalSubject.isPresent()) {
             return null;
         }
-        this.subjectRepo.save(subject);
-        return subject;
+       return this.subjectRepo.save(subject);
     }
 
     /**

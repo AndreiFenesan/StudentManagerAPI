@@ -20,7 +20,7 @@ public class SubjectController {
     public void addSubject(@RequestBody Subject subject) {
 
         try {
-            Subject subject1 = this.service.addSubject(subject.getSubjectCode(), subject.getNumberOfCredits());
+            Subject subject1 = this.service.addSubject(subject);
             if (subject1 == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Subject already exists");
             }
