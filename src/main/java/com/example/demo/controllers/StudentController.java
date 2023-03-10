@@ -1,11 +1,13 @@
 package com.example.demo.controllers;
 
+import com.example.demo.domain.builders.StudentBuilder;
 import com.example.demo.exception.ServiceException;
 import com.example.demo.services.StudentService;
 import com.example.demo.domain.Student;
 import com.example.demo.validators.ValidationError;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,14 +20,28 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping
-    public List<Student> fetchAllStudents() {
-        return studentService.getAllStudents();
+    public ResponseEntity<List<Student>> getAllStudentsFromGroup(@RequestBody Student studentOnlyGroup) {
+        StudentBuilder studentBuilder = new StudentBuilder();
+        int group = studentOnlyGroup.getGroup();
+        List<Student> students = this.studentService.getStudentsFromGroup(group).stream().map(
+                student -> {
+                    studentBuilder.reset();
+                    return studentBuilder
+                            .withStudentId(student.getId())
+                            .withFirstName(student.getFirstName())
+                            .withLastName(student.getLastName())
+                            .withSocialSecurityNumber(student.getSocialSecurityNumber())
+                            .withUsername(student.getUsername())
+                            .withEmailAddress(student.getEmailAddress()).build();
+                }
+        ).toList();
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
     @PostMapping
-    public Student AddStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> AddStudent(@RequestBody Student student) {
         try {
-            return studentService.addStudent(student);
+            return new ResponseEntity<>(studentService.addStudent(student), HttpStatus.OK);
         } catch (ServiceException | ValidationError exception) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
         }

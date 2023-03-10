@@ -16,6 +16,11 @@ public class Student extends User {
         this.group = group;
     }
 
+    public Student() {
+        super(null, null, null, null, null, null, null);
+        this.group = null;
+    }
+
     public Integer getGroup() {
         return group;
     }
