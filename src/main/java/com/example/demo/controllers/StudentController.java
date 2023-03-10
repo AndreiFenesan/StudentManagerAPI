@@ -41,7 +41,13 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<Student> AddStudent(@RequestBody Student student) {
         try {
-            return new ResponseEntity<>(studentService.addStudent(student), HttpStatus.OK);
+            Student studentFromDb = studentService.addStudent(student);
+            StudentBuilder studentBuilder = new StudentBuilder();
+            studentBuilder
+                    .withCreatedAt(studentFromDb.getCreated())
+                    .withStudentId(studentFromDb.getId());
+
+            return new ResponseEntity<>(studentBuilder.build(), HttpStatus.OK);
         } catch (ServiceException | ValidationError exception) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
         }
