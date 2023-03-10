@@ -133,7 +133,7 @@ class StudentServiceTest {
                 "assddsaBGG1234",
                 "Vasile.Micu@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         assertThrows(ValidationError.class,
                 () -> studentService.addStudent(student));
@@ -149,7 +149,7 @@ class StudentServiceTest {
                 "assddsa1234",
                 "Vasile.Micu@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         assertThrows(ValidationError.class,
                 () -> studentService.addStudent(student));
@@ -158,6 +158,22 @@ class StudentServiceTest {
     @Test
     @DisplayName("Add student: Validation error, invalid email address")
     public void addStudentInvalidEmailAddress() {
+        Student student = new Student(
+                "Vasile",
+                "Micu",
+                "MicuVasile",
+                "assddsaBGG1234",
+                "Vasile.Micu.yahoo.com",
+                113,
+                "1870818340915",
+                null);
+        assertThrows(ValidationError.class,
+                () -> studentService.addStudent(student));
+    }
+
+    @Test
+    @DisplayName("Add student: Validation error, invalid social security number")
+    public void addStudentInvalidSocialSecurityNumberAddress() {
         Student student = new Student(
                 "Vasile",
                 "Micu",
