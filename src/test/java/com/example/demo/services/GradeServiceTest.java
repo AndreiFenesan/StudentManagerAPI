@@ -81,12 +81,17 @@ class GradeServiceTest {
                 113,
                 "5020308945271",
                 null);
-        studentService.addStudent(student);
+        student = studentService.addStudent(student);
 
         subjectService.addSubject("MLR1234", 6);
         subjectService.addSubject("MLR1334", 6);
-        this.gradeService.addGrade("MLR1234", student.getId(), 8, LocalDate.now());
-        this.gradeService.addGrade("MLR1334", student.getId(), 10, LocalDate.now());
+
+        Grade grade1 = new Grade(student.getId(), "MLR1234", 8, LocalDate.now());
+        Grade grade2 = new Grade(student.getId(), "MLR1334", 10, LocalDate.now());
+
+        this.gradeService.addGrade(grade1);
+        this.gradeService.addGrade(grade2);
+
         List<GradeDto> grades = gradeService.getStudentGrades(student.getId());
         assertEquals(grades.size(), 2);
     }
@@ -105,9 +110,10 @@ class GradeServiceTest {
                 null);
         studentService.addStudent(student);
         subjectService.addSubject("MLR1234", 6);
+        Grade grade = new Grade("asdasd", "MLR1234", 0, LocalDate.now());
         assertThrows(
                 ValidationError.class,
-                () -> this.gradeService.addGrade("MLR1234", student.getId(), 0, LocalDate.now())
+                () -> this.gradeService.addGrade(grade)
         );
     }
 
@@ -115,9 +121,11 @@ class GradeServiceTest {
     @DisplayName("Student does not exist service error")
     void addGradeStudentDoesNotExist() {
         subjectService.addSubject("MLR1234", 6);
+        Grade grade = new Grade("basdads", "MLR1234", 6, LocalDate.now());
+
         assertThrows(
                 ServiceException.class,
-                () -> gradeService.addGrade("MLR1234", "1asdasd", 10, LocalDate.now()));
+                () -> gradeService.addGrade(grade));
     }
 
     @Test
@@ -133,9 +141,12 @@ class GradeServiceTest {
                 "5020308945271",
                 null);
         studentService.addStudent(student);
+
+        Grade grade = new Grade(student.getId(), "MLR1234", 6, LocalDate.now());
+
         assertThrows(
                 ServiceException.class,
-                () -> gradeService.addGrade("MLR1234", student.getId(), 10, LocalDate.now()));
+                () -> gradeService.addGrade(grade));
     }
 
     @Test
@@ -150,14 +161,18 @@ class GradeServiceTest {
                 113,
                 "5020308945271",
                 null);
-        studentService.addStudent(student);
+        student = studentService.addStudent(student);
 
         subjectService.addSubject("MLR1234", 6);
-        this.gradeService.addGrade("MLR1234", student.getId(), 8, LocalDate.now());
+
+        Grade grade1 = new Grade(student.getId(), "MLR1234", 8, LocalDate.now());
+        Grade grade2 = new Grade(student.getId(), "MLR1234", 6, LocalDate.now());
+
+        this.gradeService.addGrade(grade1);
 
         assertThrows(
                 ServiceException.class,
-                () -> this.gradeService.addGrade("MLR1234", student.getId(), 4, LocalDate.now())
+                () -> this.gradeService.addGrade(grade2)
         );
 
         List<GradeDto> grades = gradeService.getStudentGrades(student.getId());
@@ -176,19 +191,23 @@ class GradeServiceTest {
                 113,
                 "5020308945271",
                 null);
-        studentService.addStudent(student);
+        student = studentService.addStudent(student);
 
         subjectService.addSubject("MLR1111", 3);
         subjectService.addSubject("MLR2222", 4);
-        this.gradeService.addGrade("MLR2222", student.getId(), 5, LocalDate.now());
-        this.gradeService.addGrade("MLR1111", student.getId(), 6, LocalDate.now());
+
+        Grade grade1 = new Grade(student.getId(), "MLR1111", 5, LocalDate.now());
+        Grade grade2 = new Grade(student.getId(), "MLR2222", 6, LocalDate.now());
+
+        this.gradeService.addGrade(grade1);
+        this.gradeService.addGrade(grade2);
         List<GradeDto> grades = gradeService.getStudentGrades(student.getId());
         assertEquals(grades.size(), 2);
         grades.sort(Comparator.comparing(GradeDto::getSubjectCode));
         assertEquals(grades.get(0).getSubjectCode(), "MLR1111");
-        assertEquals(grades.get(0).getGrade(), 6);
+        assertEquals(grades.get(0).getGrade(), 5);
         assertEquals(grades.get(1).getSubjectCode(), "MLR2222");
-        assertEquals(grades.get(1).getGrade(), 5);
+        assertEquals(grades.get(1).getGrade(), 6);
     }
 
     @Test
@@ -212,12 +231,16 @@ class GradeServiceTest {
                 113,
                 "5020308945271",
                 null);
-        studentService.addStudent(student);
+        student = studentService.addStudent(student);
 
         subjectService.addSubject("MLR1234", 6);
         subjectService.addSubject("MLR1334", 6);
-        this.gradeService.addGrade("MLR1234", student.getId(), 8, LocalDate.now());
-        this.gradeService.addGrade("MLR1334", student.getId(), 10, LocalDate.now());
+
+        Grade grade1 = new Grade(student.getId(), "MLR1234", 8, LocalDate.now());
+        Grade grade2 = new Grade(student.getId(), "MLR1334", 10, LocalDate.now());
+
+        this.gradeService.addGrade(grade1);
+        this.gradeService.addGrade(grade2);
         this.gradeService.deleteGradeForStudent(student.getId(), "MLR1234");
 
         List<GradeDto> grades = gradeService.getStudentGrades(student.getId());

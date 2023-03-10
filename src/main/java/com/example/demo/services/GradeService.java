@@ -32,22 +32,20 @@ public class GradeService {
     }
 
     /**
-     * @param subjectCode    String representing the subjectCode of the course to witch we add the grade.
-     * @param studentId      String representing the id of the student who got the grade.
-     * @param grade          Integer representing the student grade at the subject with id subjectCode.
-     * @param graduationDate LocalDate representing the date when the student passed the exam.
+     * @param studentGrade the student grade.
      * @return the added grade, if the addition is possible.
      * @throws ServiceException if there is no student with the studentId or there is no subject with subjectCode
      * @throws ValidationError  if grade is not valid
      */
-    public Grade addGrade(String subjectCode, String studentId, Integer grade, LocalDate graduationDate) throws ServiceException, ValidationError {
-        Grade studentGrade = new Grade(studentId, subjectCode, grade, graduationDate);
+    public Grade addGrade(Grade studentGrade) throws ServiceException, ValidationError {
         gradeValidator.validate(studentGrade);
 
+        String studentId = studentGrade.getStudentId();
         Optional<Student> optionalStudent = this.studentRepo.findById(studentId);
         if (optionalStudent.isEmpty()) {
             throw new ServiceException("Student does not exists");
         }
+        String subjectCode = studentGrade.getSubjectCode();
         Optional<Subject> optionalSubject = this.subjectRepo.findSubjectBySubjectCode(subjectCode);
         if (optionalSubject.isEmpty()) {
             throw new ServiceException("Subject does not exists");

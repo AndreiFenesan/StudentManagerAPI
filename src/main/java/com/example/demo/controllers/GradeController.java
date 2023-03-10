@@ -25,7 +25,7 @@ public class GradeController {
     @PostMapping("/professorGrades")
     public void addGrade(@RequestBody Grade grade) {
         try {
-            this.gradeService.addGrade(grade.getSubjectCode(), grade.getStudentId(), grade.getGrade(), grade.getGraduationDate());
+            this.gradeService.addGrade(grade);
         } catch (ServiceException | ValidationError exception) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
         }
