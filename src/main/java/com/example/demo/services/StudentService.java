@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,10 @@ public class StudentService {
      */
     public List<Student> getAllStudents() {
         return studentRepo.findAll();
+    }
+
+    public List<Student> getStudentsFromGroup(Integer group) {
+        return this.studentRepo.findStudentsByGroup(group);
     }
 }
 
