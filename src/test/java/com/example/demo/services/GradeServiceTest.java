@@ -72,7 +72,17 @@ class GradeServiceTest {
     @Test
     @DisplayName("Grade added successfully")
     void addGradeSuccessfully() {
-        Student student = this.studentService.addStudent("Alex", "Mihai", "Alex.Mihai", "AlexMih12345");
+        Student student = new Student(
+                "Alex",
+                "Mihai",
+                "Alex.Mihai",
+                "AlexMih12345",
+                "Alex.Mihai@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
+
         subjectService.addSubject("MLR1234", 6);
         subjectService.addSubject("MLR1334", 6);
         this.gradeService.addGrade("MLR1234", student.getId(), 8, LocalDate.now());
@@ -84,7 +94,16 @@ class GradeServiceTest {
     @Test
     @DisplayName("Grade is invalid")
     void addGradeValidationException() {
-        Student student = this.studentService.addStudent("Alex", "Mihai", "Alex.Mihai", "AlexMih12345");
+        Student student = new Student(
+                "Alex",
+                "Mihai",
+                "Alex.Mihai",
+                "AlexMih12345",
+                "Alex.Mihai@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
         subjectService.addSubject("MLR1234", 6);
         assertThrows(
                 ValidationError.class,
@@ -104,7 +123,16 @@ class GradeServiceTest {
     @Test
     @DisplayName("Subject does not exist service error")
     void addGradeSubjectDoesNotExist() {
-        Student student = this.studentService.addStudent("Alex", "Mihai", "Alex.Mihai", "AlexMih12345");
+        Student student = new Student(
+                "Alex",
+                "Mihai",
+                "Alex.Mihai",
+                "AlexMih12345",
+                "Alex.Mihai@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
         assertThrows(
                 ServiceException.class,
                 () -> gradeService.addGrade("MLR1234", student.getId(), 10, LocalDate.now()));
@@ -113,7 +141,17 @@ class GradeServiceTest {
     @Test
     @DisplayName("ServiceError trying to add two grades to the same student and subject")
     void addGradeToTheSameStudent() {
-        Student student = this.studentService.addStudent("Alex", "Mihai", "Alex.Mihai", "AlexMih12345");
+        Student student = new Student(
+                "Alex",
+                "Mihai",
+                "Alex.Mihai",
+                "AlexMih12345",
+                "Alex.Mihai@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
+
         subjectService.addSubject("MLR1234", 6);
         this.gradeService.addGrade("MLR1234", student.getId(), 8, LocalDate.now());
 
@@ -129,7 +167,17 @@ class GradeServiceTest {
     @Test
     @DisplayName("Get student grades successfully")
     void getStudentGrades() {
-        Student student = this.studentService.addStudent("Alex", "Mihai", "Alex.Mihai", "AlexMih12345");
+        Student student = new Student(
+                "Alex",
+                "Mihai",
+                "Alex.Mihai",
+                "AlexMih12345",
+                "Alex.Mihai@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
+
         subjectService.addSubject("MLR1111", 3);
         subjectService.addSubject("MLR2222", 4);
         this.gradeService.addGrade("MLR2222", student.getId(), 5, LocalDate.now());
@@ -142,19 +190,30 @@ class GradeServiceTest {
         assertEquals(grades.get(1).getSubjectCode(), "MLR2222");
         assertEquals(grades.get(1).getGrade(), 5);
     }
+
     @Test
     @DisplayName("Get student grades: student does not exist")
-    void getGradeOfStudentWhoDoesNotExists(){
+    void getGradeOfStudentWhoDoesNotExists() {
         assertThrows(
                 ServiceException.class,
-                ()->gradeService.getStudentGrades("asdasd")
+                () -> gradeService.getStudentGrades("asdasd")
         );
     }
 
     @Test
     @DisplayName("Delete grades successfully")
     void deleteGradeForStudent() {
-        Student student = this.studentService.addStudent("Alex", "Mihai", "Alex.Mihai", "AlexMih12345");
+        Student student = new Student(
+                "Alex",
+                "Mihai",
+                "Alex.Mihai",
+                "AlexMih12345",
+                "Alex.Mihai@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
+
         subjectService.addSubject("MLR1234", 6);
         subjectService.addSubject("MLR1334", 6);
         this.gradeService.addGrade("MLR1234", student.getId(), 8, LocalDate.now());
@@ -173,7 +232,17 @@ class GradeServiceTest {
     @Test
     @DisplayName("Delete grade: Grade does not exist")
     void deleteGradeNotExist() {
-        Student student = this.studentService.addStudent("Alex", "Mihai", "Alex.Mihai", "AlexMih12345");
+        Student student = new Student(
+                "Alex",
+                "Mihai",
+                "Alex.Mihai",
+                "AlexMih12345",
+                "Alex.Mihai@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
+
         subjectService.addSubject("MLR1234", 6);
         assertThrows(
                 ServiceException.class,

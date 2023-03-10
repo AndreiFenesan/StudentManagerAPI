@@ -18,8 +18,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-
-import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDateTime;
@@ -76,7 +74,16 @@ class StudentServiceTest {
     @Test
     @DisplayName("The student is added successfully")
     void addStudentSuccessfully() {
-        studentService.addStudent("Vasile", "Micu", "MicuVasile", "assddsaBGG1234");
+        Student student = new Student(
+                "Vasile",
+                "Micu",
+                "MicuVasile",
+                "assddsaBGG1234",
+                "Vasile.Micu@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
         assertEquals(studentService.getAllStudents().size(), 1);
         Optional<Student> optionalStudent = studentService.findStudentByUsername("MicuVasile");
         assertTrue(optionalStudent.isPresent());
@@ -89,41 +96,62 @@ class StudentServiceTest {
     @Test
     @DisplayName("ServiceError add student with the same username")
     void addStudentWithSameUsername() {
-        studentService.addStudent("Vasile", "Micu", "MicuVasile", "assddsaBGG1234");
+        Student student = new Student(
+                "Vasile",
+                "Micu",
+                "MicuVasile",
+                "assddsaBGG1234",
+                "Vasile.Micu@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
+
+        Student studentWithSameUsername = new Student(
+                "Vassile",
+                "Miceu",
+                "MicuVasile",
+                "assddsaBGG1234",
+                "Vasilee.Micu@yahoo.com",
+                113,
+                "5020308935271",
+                null);
         assertEquals(studentService.getAllStudents().size(), 1);
         assertThrows(
                 ServiceException.class,
-                () -> studentService.addStudent("Vasilee", "Micuu", "MicuVasile", "23assddsaBGG1234")
+                () -> studentService.addStudent(studentWithSameUsername)
         );
     }
 
     @Test
     @DisplayName("The student firstname is not valid")
     void addStudentNotValidFirstName() {
-        try {
-            studentService.addStudent(
-                    null,
-                    "Micu",
-                    "MicuVasile",
-                    "assddsaBGG1234");
-            fail();
-        } catch (ValidationError validationError) {
-            assertTrue(true);
-        }
+        Student student = new Student(
+                null,
+                "Micu",
+                "MicuVasile",
+                "assddsaBGG1234",
+                "Vasile.Micu@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        assertThrows(ValidationError.class,
+                () -> studentService.addStudent(student));
     }
 
     @Test
     @DisplayName("The student password is not valid")
     void addStudentNotValidPassword() {
-        try {
-            studentService.addStudent(
-                    "Laurentiu",
-                    "Micu",
-                    "MicuVasile",
-                    "asdasdad81232");
-            fail();
-        } catch (ValidationError validationError) {
-            assertTrue(true);
-        }
+        Student student = new Student(
+                "Vasile",
+                "Micu",
+                "MicuVasile",
+                "assddsa1234",
+                "Vasile.Micu@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        assertThrows(ValidationError.class,
+                () -> studentService.addStudent(student));
     }
 }

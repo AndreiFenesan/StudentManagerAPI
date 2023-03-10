@@ -21,22 +21,18 @@ public class StudentService {
     private final Validator<Student> studentValidator;
 
     /**
-     * @param firstName String, firstName of the student we want to add.
-     * @param lastName String, lastName of the student we want to add.
-     * @param username Unique string representing the username of the student.
-     * @param password String, the student password.
-     * @return the added student.
-     * @throws ValidationError if the student is not valid.
+     * @param student String, firstName of the student we want to add.
+     * @return the added student, if possible
+     * @throws ValidationError  if the student is not valid.
      * @throws ServiceException if there is already a student in the database with the same username.
      */
 
-    public Student addStudent(String firstName, String lastName, String username, String password) throws ValidationError, ServiceException {
-        Student student = new Student(firstName, lastName, username, password, LocalDateTime.now());
+    public Student addStudent(Student student) throws ValidationError, ServiceException {
         studentValidator.validate(student);
         if (this.studentRepo.findStudentByUsername(student.getUsername()).isPresent()) {
             throw new ServiceException("Student with this username already exists");
         }
-        String encryptedPassword = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
+        String encryptedPassword = Hashing.sha256().hashString(student.getPassword(), StandardCharsets.UTF_8).toString();
         student.setPassword(encryptedPassword);
         student.setCreated(LocalDateTime.now());
         return studentRepo.save(student);
@@ -51,7 +47,6 @@ public class StudentService {
     }
 
     /**
-     *
      * @return all students found
      */
     public List<Student> getAllStudents() {

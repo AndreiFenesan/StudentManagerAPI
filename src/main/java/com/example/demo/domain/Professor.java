@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 @Document
 public class Professor extends User {
     public Professor(String firstName, String lastName, String username, String password, LocalDateTime created) {
-        super(firstName, lastName, username, password, created);
+        super(firstName, lastName, username, password, null, null, null);
     }
 }

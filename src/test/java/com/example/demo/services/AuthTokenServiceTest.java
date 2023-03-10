@@ -35,8 +35,6 @@ class AuthTokenServiceTest {
     private AuthTokenRepo tokenRepo;
 
     @Autowired
-    private ProfessorRepo professorRepo;
-    @Autowired
     private AuthTokenService authTokenService;
     @Container
     final static GenericContainer container = new GenericContainer(DockerImageName.parse("mongo:4.0.10"))
@@ -67,7 +65,16 @@ class AuthTokenServiceTest {
     @Test
     @DisplayName("Register user successfully")
     public void authenticateUser() {
-        studentService.addStudent("Marius", "Sica", "Mas", "Marius12345");
+        Student student = new Student(
+                "Marius",
+                "Sica",
+                "Mas",
+                "Marius12345",
+                "Marius.Sica@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
 
         Optional<AuthorisationTokens> tokensOptional = authTokenService.registerNewSession("Mas", "Marius12345", UserType.STUDENT);
         assertTrue(tokensOptional.isPresent());
@@ -76,7 +83,16 @@ class AuthTokenServiceTest {
     @Test
     @DisplayName("Authenticate student invalid password")
     public void authenticateUserInvalidPassword() {
-        studentService.addStudent("Marius", "Sica", "Mas", "Marius12345");
+        Student student = new Student(
+                "Marius",
+                "Sica",
+                "Mas",
+                "Marius12345",
+                "Marius.Sica@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
         Optional<AuthorisationTokens> tokensOptional = authTokenService.registerNewSession("Mas", "Marius1234", UserType.STUDENT);
         assertTrue(tokensOptional.isEmpty());
     }
@@ -84,7 +100,16 @@ class AuthTokenServiceTest {
     @Test
     @DisplayName("Authenticate student invalid username")
     public void authenticateUserInvalidUsername() {
-        studentService.addStudent("Marius", "Sica", "Mas", "Marius12345");
+        Student student = new Student(
+                "Marius",
+                "Sica",
+                "Mas",
+                "Marius12345",
+                "Marius.Sica@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
         Optional<AuthorisationTokens> tokensOptional = authTokenService.registerNewSession("mas", "Marius12345", UserType.STUDENT);
         assertTrue(tokensOptional.isEmpty());
     }
@@ -92,7 +117,16 @@ class AuthTokenServiceTest {
     @Test
     @DisplayName("Authenticate user token successfully")
     public void renewTokenSuccessfully() {
-        Student student = studentService.addStudent("Marius", "Sica", "Mas", "Marius12345");
+        Student student = new Student(
+                "Marius",
+                "Sica",
+                "Mas",
+                "Marius12345",
+                "Marius.Sica@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
         Optional<AuthorisationTokens> tokensOptional = authTokenService.registerNewSession("Mas", "Marius12345", UserType.STUDENT);
         assertTrue(tokensOptional.isPresent());
 
@@ -109,9 +143,19 @@ class AuthTokenServiceTest {
     }
 
     @Test
-    @DisplayName("Authenticate user token fail")
+    @DisplayName("Authenticate user token failL invalid userId and token")
     public void AuthenticateUserTokenFail() {
-        Student student = studentService.addStudent("Marius", "Sica", "Mas", "Marius12345");
+        Student student = new Student(
+                "Marius",
+                "Sica",
+                "Mas",
+                "Marius12345",
+                "Marius.Sica@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
+
         Optional<AuthorisationTokens> tokensOptional = authTokenService.registerNewSession("Mas", "Marius12345", UserType.STUDENT);
         assertTrue(tokensOptional.isPresent());
 
@@ -128,7 +172,17 @@ class AuthTokenServiceTest {
     @Test
     @DisplayName("Register new session even if the usser is already logged in")
     public void registerNewSessionUserAlreadyLoggedIn() {
-        Student student = studentService.addStudent("Marius", "Sica", "Mas", "Marius12345");
+        Student student = new Student(
+                "Marius",
+                "Sica",
+                "Mas",
+                "Marius12345",
+                "Marius.Sica@yahoo.com",
+                113,
+                "5020308945271",
+                null);
+        studentService.addStudent(student);
+
         Optional<AuthorisationTokens> tokensOptional1 = authTokenService.registerNewSession("Mas", "Marius12345", UserType.STUDENT);
         assertTrue(tokensOptional1.isPresent());
         AuthorisationTokens tokens1 = tokensOptional1.get();
@@ -140,7 +194,6 @@ class AuthTokenServiceTest {
         assertNotEquals(tokens1.getAuthToken(), tokens2.getAuthToken());
         assertNotEquals(tokens1.getRefreshToken(), tokens2.getRefreshToken());
         assertEquals(tokens1.getUserId(), tokens2.getUserId());
-
 
     }
 

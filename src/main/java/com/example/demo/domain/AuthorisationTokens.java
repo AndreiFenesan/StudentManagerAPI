@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,6 @@ public class AuthorisationTokens {
     private String refreshToken;
 
     private UserType userType;
-
     private LocalDateTime tokenAvailability;
 
     public AuthorisationTokens(String userId, String authToken, String refreshToken, LocalDateTime tokenAvailability, UserType userType) {
@@ -34,7 +34,6 @@ public class AuthorisationTokens {
     public String getRefreshToken() {
         return refreshToken;
     }
-
     public LocalDateTime getTokenAvailability() {
         return tokenAvailability;
     }
