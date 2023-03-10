@@ -80,7 +80,7 @@ class GradeServiceTest {
                 "AlexMih12345",
                 "Alex.Mihai@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         student = studentService.addStudent(student);
 
@@ -107,7 +107,7 @@ class GradeServiceTest {
                 "AlexMih12345",
                 "Alex.Mihai@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
         subjectService.addSubject(new Subject("MLR1234", 6));
@@ -139,7 +139,7 @@ class GradeServiceTest {
                 "AlexMih12345",
                 "Alex.Mihai@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
 
@@ -160,7 +160,7 @@ class GradeServiceTest {
                 "AlexMih12345",
                 "Alex.Mihai@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         student = studentService.addStudent(student);
 
@@ -190,7 +190,7 @@ class GradeServiceTest {
                 "AlexMih12345",
                 "Alex.Mihai@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         student = studentService.addStudent(student);
 
@@ -230,7 +230,7 @@ class GradeServiceTest {
                 "AlexMih12345",
                 "Alex.Mihai@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         student = studentService.addStudent(student);
 
@@ -263,7 +263,7 @@ class GradeServiceTest {
                 "AlexMih12345",
                 "Alex.Mihai@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
 

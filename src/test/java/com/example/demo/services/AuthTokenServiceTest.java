@@ -72,7 +72,7 @@ class AuthTokenServiceTest {
                 "Marius12345",
                 "Marius.Sica@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
 
@@ -90,7 +90,7 @@ class AuthTokenServiceTest {
                 "Marius12345",
                 "Marius.Sica@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
         Optional<AuthorisationTokens> tokensOptional = authTokenService.registerNewSession("Mas", "Marius1234", UserType.STUDENT);
@@ -107,7 +107,7 @@ class AuthTokenServiceTest {
                 "Marius12345",
                 "Marius.Sica@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
         Optional<AuthorisationTokens> tokensOptional = authTokenService.registerNewSession("mas", "Marius12345", UserType.STUDENT);
@@ -124,7 +124,7 @@ class AuthTokenServiceTest {
                 "Marius12345",
                 "Marius.Sica@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
         Optional<AuthorisationTokens> tokensOptional = authTokenService.registerNewSession("Mas", "Marius12345", UserType.STUDENT);
@@ -152,7 +152,7 @@ class AuthTokenServiceTest {
                 "Marius12345",
                 "Marius.Sica@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
 
@@ -179,7 +179,7 @@ class AuthTokenServiceTest {
                 "Marius12345",
                 "Marius.Sica@yahoo.com",
                 113,
-                "5020308945271",
+                "1870818340915",
                 null);
         studentService.addStudent(student);
 
