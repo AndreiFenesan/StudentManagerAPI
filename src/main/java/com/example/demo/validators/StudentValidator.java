@@ -1,12 +1,47 @@
 package com.example.demo.validators;
 
 import com.example.demo.domain.Student;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
 @Component
 public class StudentValidator implements Validator<Student> {
+    @Value("${validGroups}")
+    private String[] validGroups;
+
+    @Override
+    public void validate(Student student) throws ValidationError {
+        checkNullnessOfStudent(student);
+        validatePassword(student.getPassword());
+        validateEmailAddress(student.getEmailAddress());
+        validateSocialSecurityNumber(student.getSocialSecurityNumber());
+        validateGroup(student.getGroup());
+
+        String error = "";
+        if (student.getUsername().length() < 3) {
+            error += "Username must have at least 3 characters.";
+        }
+        if (student.getFirstName().length() < 3) {
+            error += "Username must have at least 3 characters.";
+        }
+        if (error.length() > 0) {
+            throw new ValidationError(error);
+        }
+    }
+
+    private void validateGroup(Integer group) throws ValidationError {
+        boolean isGroupValid = false;
+        for (String validGroup : this.validGroups) {
+            if (Integer.valueOf(validGroup).equals(group)) {
+                isGroupValid = true;
+                return;
+            }
+        }
+        throw new ValidationError("Group is invalid");
+    }
+
 
     private boolean hasStringAtLeastOneCapitalLetter(String string) {
         for (int i = 0; i < string.length(); i++) {
@@ -59,22 +94,5 @@ public class StudentValidator implements Validator<Student> {
         }
     }
 
-    @Override
-    public void validate(Student student) throws ValidationError {
-        checkNullnessOfStudent(student);
-        validatePassword(student.getPassword());
-        validateEmailAddress(student.getEmailAddress());
-        validateSocialSecurityNumber(student.getSocialSecurityNumber());
 
-        String error = "";
-        if (student.getUsername().length() < 3) {
-            error += "Username must have at least 3 characters.";
-        }
-        if (student.getFirstName().length() < 3) {
-            error += "Username must have at least 3 characters.";
-        }
-        if (error.length() > 0) {
-            throw new ValidationError(error);
-        }
-    }
 }
