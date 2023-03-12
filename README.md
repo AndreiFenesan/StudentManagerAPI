@@ -1,7 +1,7 @@
 # Student Manager API
 
 Student Manager API is a **Rest API** that helps you to manage
-student grades.
+students' grades.
 
 ## Technologies used:
 1. Spring
