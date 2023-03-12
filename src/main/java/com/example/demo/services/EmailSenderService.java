@@ -17,10 +17,10 @@ public class EmailSenderService {
         this.mailSender = mailSender;
     }
 
-    public void sendEmail(String to, String message, String subject) {
+    public void sendEmail(String studentEmailAddress, String message, String subject) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(this.from);
-        simpleMailMessage.setTo(to);
+        simpleMailMessage.setTo(studentEmailAddress);
         simpleMailMessage.setText(message);
         simpleMailMessage.setSubject(subject);
         mailSender.send(simpleMailMessage);

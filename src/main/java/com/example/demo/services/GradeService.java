@@ -10,6 +10,7 @@ import com.example.demo.repositories.StudentRepo;
 import com.example.demo.repositories.SubjectRepo;
 import com.example.demo.validators.GradeValidator;
 import com.example.demo.validators.ValidationError;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,16 +20,23 @@ import java.util.stream.Collectors;
 
 @Service
 public class GradeService {
+    @Value("${newGradeMessage}")
+    private String message;
+    @Value("${newGradeSubject}")
+    private String subject;
+    private final EmailSenderService emailSenderService;
     private final GradeRepo gradeRepo;
     private final StudentRepo studentRepo;
     private final SubjectRepo subjectRepo;
     private final GradeValidator gradeValidator;
 
-    public GradeService(GradeRepo gradeRepo, StudentRepo studentRepo, SubjectRepo subjectRepo, GradeValidator gradeValidator) {
+    public GradeService(GradeRepo gradeRepo, StudentRepo studentRepo, SubjectRepo subjectRepo, GradeValidator gradeValidator,
+                        EmailSenderService emailSenderService) {
         this.gradeRepo = gradeRepo;
         this.studentRepo = studentRepo;
         this.subjectRepo = subjectRepo;
         this.gradeValidator = gradeValidator;
+        this.emailSenderService = emailSenderService;
     }
 
     /**
@@ -56,6 +64,8 @@ public class GradeService {
             throw new ServiceException("The student already has a grade for this subject");
         }
         this.gradeRepo.save(studentGrade);
+        //send the email to the student
+        emailSenderService.sendEmail(optionalStudent.get().getEmailAddress(),message,subject);
         return studentGrade;
     }
 
