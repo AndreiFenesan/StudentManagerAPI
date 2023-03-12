@@ -4,13 +4,18 @@ import com.example.demo.filters.LoginFilter;
 import com.example.demo.filters.ProfessorFilter;
 import com.example.demo.repositories.StudentRepo;
 import com.example.demo.services.AuthTokenService;
+import com.example.demo.services.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
+
+import java.util.Random;
 
 
 @SpringBootApplication
@@ -19,6 +24,12 @@ public class DemoApplication {
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
+//    @EventListener(ApplicationReadyEvent.class)
+//    void send(){
+//        Random random = new Random();
+//        System.out.println(random.nextInt());
+//        emailSenderService.sendEmail("afenesan60@gmail.com","Salut ce faci?","Testut2");
+//    }
 
     @Bean
     @Autowired
