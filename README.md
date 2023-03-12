@@ -5,7 +5,8 @@ student grades.
 
 ## Technologies used:
 1. Spring
-2. MongoDb
+2. MongoDb for storing data.
+3. Junit for testing.
 
 ## Key features:
 * Easily manage CRUD operation on students, courses and grades. 
