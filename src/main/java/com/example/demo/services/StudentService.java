@@ -7,6 +7,7 @@ import com.example.demo.validators.ValidationError;
 import com.example.demo.validators.Validator;
 import com.google.common.hash.Hashing;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -18,10 +19,16 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class StudentService {
+    @Value("${newGradeMessage}")
+    private String message;
+    @Value("${newGradeSubject}")
+    private String subject;
     private final StudentRepo studentRepo;
     private final Validator<Student> studentValidator;
+    private final EmailSenderService emailSenderService;
 
     /**
+     * method that validate and adds a new student to the database.
      * @param student String, firstName of the student we want to add.
      * @return the added student, if possible
      * @throws ValidationError  if the student is not valid.
