@@ -19,11 +19,10 @@ import java.util.List;
 public class StudentController {
     private final StudentService studentService;
 
-    @GetMapping
-    public ResponseEntity<List<Student>> getAllStudentsFromGroup(@RequestBody Student studentOnlyGroup) {
+    @GetMapping()
+    public ResponseEntity<List<Student>> getAllStudentsFromGroup(@RequestParam Integer groupNumber) {
         StudentBuilder studentBuilder = new StudentBuilder();
-        int group = studentOnlyGroup.getGroup();
-        List<Student> students = this.studentService.getStudentsFromGroup(group).stream().map(
+        List<Student> students = this.studentService.getStudentsFromGroup(groupNumber).stream().map(
                 student -> {
                     studentBuilder.reset();
                     return studentBuilder
