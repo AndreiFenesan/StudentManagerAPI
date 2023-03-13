@@ -24,6 +24,7 @@ public class GradeController {
 
     /**
      * method that adds a new grade. If the addition is no possible, an error message will be returned.
+     *
      * @param grade the grade to be added.
      */
     @PostMapping("/professorGrades")
@@ -36,6 +37,13 @@ public class GradeController {
     }
 
 
+    /**
+     * method that returns all grades of a student.
+     *
+     * @param studentIdDto the dto representing the student id.
+     * @return The list with all grades of the student who has the id equals with the studentIdDto, if no error occurs.
+     * Otherwise, returns a error message.
+     */
     @GetMapping("/studentGrades")
     public List<GradeDto> getGradesForStudent(@RequestBody StudentIdDto studentIdDto) {
         if (studentIdDto.getStudentId() == null) {
@@ -48,6 +56,12 @@ public class GradeController {
         }
     }
 
+    /**
+     * method that deletes a grade for a student if no error occurs.
+     * Otherwise, returns an error message
+     *
+     * @param studentIdAndSubjectCode dto that contains the student id and the subject code.
+     */
     @DeleteMapping("/professorGrades")
     public void deleteGradeForStudent(@RequestBody StudentIdAndSubjectCodeDto studentIdAndSubjectCode) {
         try {

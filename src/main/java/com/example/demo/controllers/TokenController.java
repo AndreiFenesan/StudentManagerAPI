@@ -18,6 +18,13 @@ import java.util.Optional;
 public class TokenController {
     private final AuthTokenService tokenService;
 
+    /**
+     * methdo that register a new session for a student.
+     *
+     * @param header map that must values for 2 keys: username and password.
+     * @return the student tokens (authentication token and refresh token), if the credentials are valid.
+     * Otherwise, returns an error message.
+     */
     @PostMapping("/login/student")
     public TokenDto registerStudentSession(@RequestHeader Map<String, String> header) {
         Optional<AuthorisationTokens> optionalAuthToken = tokenService.registerNewSession(header.get("username"), header.get("password"), UserType.STUDENT);
@@ -28,6 +35,13 @@ public class TokenController {
         }
     }
 
+    /**
+     * method that register a new session for the professor.
+     *
+     * @param header map that must values for 2 keys: username and password.
+     * @return the professor tokens (authentication token and refresh token), if the credentials are valid.
+     * Otherwise, returns an error message.
+     */
     @PostMapping("/login/professor")
     public TokenDto registerProfessorSession(@RequestHeader Map<String, String> header) {
         Optional<AuthorisationTokens> optionalAuthToken = tokenService.registerNewSession(header.get("username"), header.get("password"), UserType.PROFESSOR);
@@ -45,6 +59,13 @@ public class TokenController {
         return new TokenDto(authorisationToken, refreshToken);
     }
 
+    /**
+     * method that genereate another token for the user who sent the request
+     *
+     * @param header map that must values for 2 keys: userid and refreshtoken.
+     * @return the new generated token, if the provided values are valid.
+     * Otherwise, return a error message.
+     */
     @PostMapping("/renewtoken")
     public TokenDto renewToken(@RequestHeader Map<String, String> header) {
         Optional<AuthorisationTokens> optionalAuthToken = tokenService.renewAuthenticationToken(header.get("userid"), header.get("refreshtoken"));
