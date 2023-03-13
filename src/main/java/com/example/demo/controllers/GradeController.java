@@ -22,6 +22,10 @@ public class GradeController {
         this.gradeService = gradeService;
     }
 
+    /**
+     * method that adds a new grade. If the addition is no possible, an error message will be returned.
+     * @param grade the grade to be added.
+     */
     @PostMapping("/professorGrades")
     public void addGrade(@RequestBody Grade grade) {
         try {
@@ -30,6 +34,7 @@ public class GradeController {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
         }
     }
+
 
     @GetMapping("/studentGrades")
     public List<GradeDto> getGradesForStudent(@RequestBody StudentIdDto studentIdDto) {

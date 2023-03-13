@@ -16,6 +16,10 @@ public class SubjectController {
         this.service = service;
     }
 
+    /**
+     * method that adds a new subject. If the add is not possible, a error message will be returned.
+     * @param subject the subject to add
+     */
     @PostMapping
     public void addSubject(@RequestBody Subject subject) {
 

@@ -19,6 +19,11 @@ import java.util.List;
 public class StudentController {
     private final StudentService studentService;
 
+    /**
+     * method that returns all students from specific group.
+     * @param groupNumber Integer that indicates the group from which all students will be returned.
+     * @return a list with all students from group groupNumber.
+     */
     @GetMapping()
     public ResponseEntity<List<Student>> getAllStudentsFromGroup(@RequestParam Integer groupNumber) {
         StudentBuilder studentBuilder = new StudentBuilder();
@@ -37,6 +42,11 @@ public class StudentController {
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
+    /**
+     * method that adds a student.
+     * @param student a student
+     * @return the added student, if this is possible. Otherwise, the error due to which the student could not be added
+     */
     @PostMapping
     public ResponseEntity<Student> AddStudent(@RequestBody Student student) {
         try {
