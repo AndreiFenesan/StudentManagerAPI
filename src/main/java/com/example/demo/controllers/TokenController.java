@@ -31,7 +31,7 @@ public class TokenController {
         if (optionalAuthToken.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         } else {
-            return getTokenDto(optionalAuthToken);
+            return getTokenDto(optionalAuthToken.get());
         }
     }
 
@@ -48,15 +48,14 @@ public class TokenController {
         if (optionalAuthToken.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         } else {
-            return getTokenDto(optionalAuthToken);
+            return getTokenDto(optionalAuthToken.get());
         }
     }
 
-    private TokenDto getTokenDto(Optional<AuthorisationTokens> optionalAuthToken) {
-        AuthorisationTokens authorisationTokens = optionalAuthToken.get();
+    private TokenDto getTokenDto(AuthorisationTokens authorisationTokens) {
         String authorisationToken = authorisationTokens.getAuthToken();
         String refreshToken = authorisationTokens.getRefreshToken();
-        return new TokenDto(authorisationToken, refreshToken);
+        return new TokenDto(authorisationTokens.getUserId(), authorisationToken, refreshToken);
     }
 
     /**
@@ -72,7 +71,7 @@ public class TokenController {
         if (optionalAuthToken.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token expired");
         } else {
-            return getTokenDto(optionalAuthToken);
+            return getTokenDto(optionalAuthToken.get());
         }
     }
 
