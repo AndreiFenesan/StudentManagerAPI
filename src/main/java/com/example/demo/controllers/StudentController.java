@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -18,14 +20,17 @@ import java.util.List;
 @AllArgsConstructor
 public class StudentController {
     private final StudentService studentService;
+    private static final Logger logger = LogManager.getLogger();
 
     /**
      * method that returns all students from specific group.
+     *
      * @param groupNumber Integer that indicates the group from which all students will be returned.
      * @return a list with all students from group groupNumber.
      */
     @GetMapping()
     public ResponseEntity<List<Student>> getAllStudentsFromGroup(@RequestParam Integer groupNumber) {
+        logger.traceEntry("Get students from group: {}", groupNumber);
         StudentBuilder studentBuilder = new StudentBuilder();
         List<Student> students = this.studentService.getStudentsFromGroup(groupNumber).stream().map(
                 student -> {
@@ -39,11 +44,13 @@ public class StudentController {
                             .withEmailAddress(student.getEmailAddress()).build();
                 }
         ).toList();
+        logger.traceExit("Got all students from group: {}", groupNumber);
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 
     /**
      * method that adds a student.
+     *
      * @param student a student
      * @return the added student, if this is possible. Otherwise, the error due to which the student could not be added
      */

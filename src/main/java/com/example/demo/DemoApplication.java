@@ -5,6 +5,8 @@ import com.example.demo.filters.ProfessorFilter;
 import com.example.demo.repositories.StudentRepo;
 import com.example.demo.services.AuthTokenService;
 import com.example.demo.services.EmailSenderService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,8 +22,9 @@ import java.util.Random;
 
 @SpringBootApplication
 public class DemoApplication {
-
+    private static final Logger logger = LogManager.getLogger();
     public static void main(String[] args) {
+        logger.warn("Entering main");
         SpringApplication.run(DemoApplication.class, args);
     }
 //    @EventListener(ApplicationReadyEvent.class)
